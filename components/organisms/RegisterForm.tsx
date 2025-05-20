@@ -45,28 +45,27 @@ export const RegisterForm: React.FC = () => {
       return false;
     }
 
-    // Validar teléfono entre 10 y 15 dígitos
     if (form.telefono.length < 10 || form.telefono.length > 15) {
       setError("El teléfono debe tener entre 10 y 15 caracteres.");
       return false;
     }
 
-    // Validar que emails coincidan y formato básico email
     if (form.email !== form.confirmarEmail) {
       setError("Los correos electrónicos no coinciden.");
       return false;
     }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       setError("El correo electrónico no tiene un formato válido.");
       return false;
     }
 
-    // Validar que contraseñas coincidan
     if (form.password !== form.confirmarPassword) {
       setError("Las contraseñas no coinciden.");
       return false;
     }
+
     if (form.password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres.");
       return false;
@@ -85,40 +84,29 @@ export const RegisterForm: React.FC = () => {
     setLoading(true);
 
     try {
-      const response = await post("/api/auth/register", {
+      const data = await post("/api/auth/register", {
         nombre: `${form.nombres} ${form.primerApellido} ${form.segundoApellido}`,
-
         email: form.email,
         telefono: form.telefono,
         password: form.password,
       });
 
-      if (!response.ok) {
-        // Leer mensaje de error si el backend lo envía en JSON
-        const data = await response.json().catch(() => null);
-        setError(
-          data?.message ||
-            data?.error ||
-            "Error en el registro, intente nuevamente."
-        );
-      } else {
-        setMensaje("Registro exitoso.");
-        setForm({
-          primerApellido: "",
-          segundoApellido: "",
-          nombres: "",
-          numeroDocumento: "",
-          tipoDocumento: "",
-          telefono: "",
-          fechaNacimiento: "",
-          email: "",
-          confirmarEmail: "",
-          password: "",
-          confirmarPassword: "",
-        });
-      }
+      setMensaje(data.message || "Registro exitoso.");
+      setForm({
+        primerApellido: "",
+        segundoApellido: "",
+        nombres: "",
+        numeroDocumento: "",
+        tipoDocumento: "",
+        telefono: "",
+        fechaNacimiento: "",
+        email: "",
+        confirmarEmail: "",
+        password: "",
+        confirmarPassword: "",
+      });
     } catch (err: any) {
-      setError("Error al conectar con el servidor.");
+      setError(err.message || "Error al conectar con el servidor.");
     } finally {
       setLoading(false);
     }
