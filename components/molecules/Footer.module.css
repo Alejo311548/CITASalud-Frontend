@@ -1,0 +1,71 @@
+.footer {
+  background-color: #ffffff;
+  color: black;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  flex-wrap: wrap;
+  border-top: 1px solid #e5e7eb;
+}
+
+.footerText {
+  font-size: 1.125rem;
+  font-weight: 950;
+}
+
+.left {
+  flex: 1;
+}
+
+.right {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Botones estilo */
+.buttonPrimary,
+.buttonSecondary {
+  padding: 0.5rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  color: white; /* letra blanca */
+}
+
+/* Botón "Register" - azul más intenso */
+.buttonPrimary {
+  background-color: #3b82f6; /* Azul header hover */
+}
+
+.buttonPrimary:hover {
+  background-color: #2563eb; /* Azul más fuerte en hover */
+  transform: translateY(-1px);
+}
+
+/* Botón "Log in" - azul más claro */
+.buttonSecondary {
+  background-color: #60a5fa; /* Azul header normal */
+}
+
+.buttonSecondary:hover {
+  background-color: #3b82f6; /* Azul header hover */
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .right {
+    align-self: flex-end;
+  }
+}

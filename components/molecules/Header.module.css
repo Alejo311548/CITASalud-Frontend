@@ -1,0 +1,91 @@
+/* Header.module.css - Modern and attractive styles with lighter blue and prominent logo */
+
+.header {
+  /* Gradient background: lighter blue shades */
+  background: linear-gradient(90deg, #93c5fd 0%, #bfdbfe 100%);
+  color: #000000; /* Changed from white to black */
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  transition: background 0.3s ease;
+}
+
+.header:hover {
+  /* Slight darkening on hover */
+  background: linear-gradient(90deg, #60a5fa 0%, #93c5fd 100%);
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin: 0;
+  position: relative;
+  color: #000000; /* Ensures text is black */
+}
+
+.title::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 3px;
+  background: #000000; /* Changed from white to black */
+  transition: width 0.4s ease;
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+}
+
+.title:hover::after {
+  width: 50%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand img {
+  /* Larger logo without shadow */
+  border-radius: 0.5rem;
+  width: 130px; /* Slightly increased size */
+  height: auto;
+  transition: transform 0.3s ease;
+}
+
+.brand img:hover {
+  /* Slight scale on hover without shadow */
+  transform: scale(1.1) translateY(-2px);
+}
+
+.brandText {
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #000000; /* Ensures text is black */
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .brand {
+    margin-top: 0.75rem;
+  }
+}
