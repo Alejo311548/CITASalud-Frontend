@@ -34,7 +34,7 @@ const CancelAppointments = () => {
       console.log("Token obtenido:", token);
 
       try {
-        const response = await fetch("http://localhost:8080/api/citas/mis-citas", {
+        const response = await fetch("https://citasalud-backend-1.onrender.com/api/citas/mis-citas", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -83,7 +83,7 @@ const CancelAppointments = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/citas/${selectedAppointmentId}/cancelar`, {
+      const response = await fetch(`https://citasalud-backend-1.onrender.com/api/citas/${selectedAppointmentId}/cancelar`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

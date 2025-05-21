@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8080";
+const API_URL = "https://citasalud-backend-1.onrender.com";
 
 export async function get(path: string, options?: RequestInit) {
   const res = await fetch(`${API_URL}${path}`, options);
