@@ -2,7 +2,7 @@ import React from "react";
 
 type TextProps = {
   children: React.ReactNode;
-  variant?: "title" | "body" | "caption"; // agrega los que necesites
+  variant?: "title" | "body" | "caption"; 
   className?: string;
 };
 

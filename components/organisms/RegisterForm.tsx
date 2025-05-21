@@ -109,10 +109,10 @@ export const RegisterForm: React.FC = () => {
         confirmarPassword: "",
       });
 
-      // Redirigir a la página principal tras 1.5 segundos para que se vea mensaje
+      
       setTimeout(() => {
         router.push("/");
-      }, 1500);
+      }, 0);
 
     } catch (err: any) {
       setError(err.message || "Error al conectar con el servidor.");

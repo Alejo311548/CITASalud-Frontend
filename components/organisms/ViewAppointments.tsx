@@ -30,8 +30,7 @@ const ViewAppointments = () => {
         return;
       }
 
-      console.log("Token obtenido:", token); // ✅ Imprimir token
-
+      console.log("Token obtenido:", token); //Borrar esta línea, la puse para imprimir el token
       try {
         const response = await fetch("http://localhost:8080/api/citas/mis-citas", {
           method: "GET",

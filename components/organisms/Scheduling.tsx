@@ -160,7 +160,7 @@ const Scheduling = () => {
   };
 
   const handleConfirm = async () => {
-    const token = getToken(); // Mover lectura de token aquí
+    const token = getToken(); 
     
 console.log("Token antes de enviar:", token);
 if (!token) {
