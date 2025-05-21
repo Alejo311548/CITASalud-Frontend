@@ -27,25 +27,34 @@ export const Login: React.FC = () => {
     setLoading(true);
 
     try {
+      // Limpiar tokens anteriores antes de iniciar sesión
+      localStorage.removeItem("token");
+      sessionStorage.removeItem("token");
+
       const data = await post("/api/auth/login", {
         email: form.email,
         password: form.password,
       });
 
-      // Guardar token según remember
-      if (remember) {
-        localStorage.setItem("token", data.token);
-      } else {
-        sessionStorage.setItem("token", data.token);
+      const token = data.token;
+      console.log("🔐 Token recibido:", token);
+
+      // Validación básica del token: debe existir y tener 3 partes
+      if (!token || token.split(".").length !== 3) {
+        throw new Error("Token inválido recibido del servidor");
       }
 
-      setError(null);
-      setLoading(false);
+      // Guardar el nuevo token
+      if (remember) {
+        localStorage.setItem("token", token);
+      } else {
+        sessionStorage.setItem("token", token);
+      }
 
-      // Redirigir a Home tras login exitoso
+      setLoading(false);
       router.push("/Home");
     } catch (err: any) {
-      setError(err.message || "Error al iniciar sesión");
+      setError(err?.message || "Error al iniciar sesión");
       setLoading(false);
     }
   };

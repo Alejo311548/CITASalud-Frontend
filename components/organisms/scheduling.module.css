@@ -401,4 +401,57 @@
   transform: scale(1.05);
 }
 
+/* Círculo con borde azul para el logo en el modal */
+.modalLogoCircle {
+  width: 90px;
+  height: 90px;
+  border: 3px solid #3b82f6; /* azul - puedes ajustar el color */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 15px auto; /* centra horizontal y margen abajo */
+  background-color: white; /* opcional, para que no se mezcle con fondo */
+}
+
+/* Imagen del logo dentro del círculo */
+.modalLogoImage {
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+/* Botón Confirmar cita - azul claro, más agradable */
+.confirmButton {
+  background-color: #60a5fa; /* azul claro */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-right: 10px;
+}
+
+.confirmButton:hover {
+  background-color: #3b82f6; /* azul más intenso en hover */
+}
+
+/* Botón Cancelar - rojo */
+.cancelButton {
+  background-color: #ef4444; /* rojo */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cancelButton:hover {
+  background-color: #dc2626; /* rojo más intenso en hover */
+}
+
+
 

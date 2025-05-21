@@ -2,21 +2,27 @@
 
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import styles from "./scheduling.module.css";
 import {
   CalendarPlus,
   CalendarX,
   CalendarClock,
   CalendarDays,
-
+  LogOut,
 } from "lucide-react";
+import { getToken, removeToken } from "@/utils/auth";
 
-const user = {
-  name: "Juan Pérez",
-  role: "Administrador",
-};
+
 
 const Home = () => {
+  const router = useRouter();
+
+  const handleLogout = () => {
+    removeToken();
+    router.push("/");
+  };
+
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
@@ -32,47 +38,52 @@ const Home = () => {
 
         <h2 className={styles.menuTitle}>Menú de Citas</h2>
         <div className={styles.menuOptions}>
-          <button className={styles.menuButton}>
+          <button className={styles.menuButton} onClick={() => router.push("/scheduling")}>
             <CalendarPlus size={24} className={styles.icon} />
             Agendar Cita
           </button>
-          <button className={styles.menuButton}>
+          <button className={styles.menuButton} onClick={() => router.push("/CancelAppointment")}>
             <CalendarX size={24} className={styles.icon} />
             Cancelar Cita
           </button>
-          <button className={styles.menuButton}>
+          <button className={styles.menuButton} onClick={() => router.push("/ModifyAppointment")}>
             <CalendarClock size={24} className={styles.icon} />
             Modificar Cita
           </button>
-          <button className={styles.menuButton}>
+          <button className={styles.menuButton} onClick={() => router.push("/ViewAppointments")}>
             <CalendarDays size={24} className={styles.icon} />
             Visualizar Citas
           </button>
-          
+          <button
+            className={`${styles.menuButton} ${styles.logoutButton}`}
+            onClick={handleLogout}
+          >
+            <LogOut size={24} className={styles.icon} />
+            Cerrar sesión
+          </button>
         </div>
       </aside>
 
       <main className={styles.main}>
         <section className={styles.headerSection}>
           <div className={styles.welcome}>
-            Bienvenido a <span className={styles.brand}>CITASalud</span>,{" "}
-            <strong>{user.name}</strong> ({user.role})
+            Bienvenido a <span className={styles.brand}>CITASalud</span>{" "}
+           
           </div>
 
           <div className={styles.titleRow}>
-  <h2 className={styles.title}>Inicio</h2>
+            <h2 className={styles.title}>Inicio</h2>
 
-  <div className={styles.logoHome}>
-    <Image
-      src="/logo.png"
-      alt="Logo CITASalud"
-      width={100}
-      height={100}
-      priority
-    />
-  </div>
-</div>
-
+            <div className={styles.logoHome}>
+              <Image
+                src="/logo.png"
+                alt="Logo CITASalud"
+                width={100}
+                height={100}
+                priority
+              />
+            </div>
+          </div>
 
           <p className={styles.subtitle}>
             Aquí podrá gestionar sus citas médicas de manera fácil y rápida.

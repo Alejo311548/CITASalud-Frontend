@@ -4,16 +4,19 @@ import React, { useState } from "react";
 import Image from "next/image";
 import styles from "./RegisterForm.module.css";
 import { post } from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 export const RegisterForm: React.FC = () => {
+  const router = useRouter();
+
   const [form, setForm] = useState({
     primerApellido: "",
     segundoApellido: "",
     nombres: "",
-    numeroDocumento: "",
-    tipoDocumento: "",
-    telefono: "",
     fechaNacimiento: "",
+    tipoDocumento: "",
+    numeroDocumento: "",
+    telefono: "",
     email: "",
     confirmarEmail: "",
     password: "",
@@ -24,7 +27,7 @@ export const RegisterForm: React.FC = () => {
   const [mensaje, setMensaje] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
@@ -96,15 +99,21 @@ export const RegisterForm: React.FC = () => {
         primerApellido: "",
         segundoApellido: "",
         nombres: "",
-        numeroDocumento: "",
-        tipoDocumento: "",
-        telefono: "",
         fechaNacimiento: "",
+        tipoDocumento: "",
+        numeroDocumento: "",
+        telefono: "",
         email: "",
         confirmarEmail: "",
         password: "",
         confirmarPassword: "",
       });
+
+      // Redirigir a la página principal tras 1.5 segundos para que se vea mensaje
+      setTimeout(() => {
+        router.push("/");
+      }, 1500);
+
     } catch (err: any) {
       setError(err.message || "Error al conectar con el servidor.");
     } finally {
@@ -141,6 +150,7 @@ export const RegisterForm: React.FC = () => {
               required
             />
           </div>
+
           <div className={styles.row}>
             <input
               type="text"
@@ -151,6 +161,30 @@ export const RegisterForm: React.FC = () => {
               required
             />
             <input
+              type="date"
+              name="fechaNacimiento"
+              placeholder="Fecha de nacimiento"
+              value={form.fechaNacimiento}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className={styles.row}>
+            <select
+              name="tipoDocumento"
+              value={form.tipoDocumento}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Tipo de documento (*)
+              </option>
+              <option value="Cédula">Cédula</option>
+              <option value="Tarjeta de identidad">Tarjeta de identidad</option>
+              <option value="Pasaporte">Pasaporte</option>
+            </select>
+
+            <input
               type="text"
               name="numeroDocumento"
               placeholder="Número de documento (*)"
@@ -159,15 +193,8 @@ export const RegisterForm: React.FC = () => {
               required
             />
           </div>
+
           <div className={styles.row}>
-            <input
-              type="text"
-              name="tipoDocumento"
-              placeholder="Tipo de documento (*)"
-              value={form.tipoDocumento}
-              onChange={handleChange}
-              required
-            />
             <input
               type="tel"
               name="telefono"
@@ -178,25 +205,6 @@ export const RegisterForm: React.FC = () => {
               pattern="[0-9]{10,15}"
               title="El teléfono debe tener entre 10 y 15 dígitos numéricos"
             />
-          </div>
-          <div className={styles.row}>
-            <input
-              type="date"
-              name="fechaNacimiento"
-              placeholder="Fecha de nacimiento"
-              value={form.fechaNacimiento}
-              onChange={handleChange}
-            />
-            <input
-              type="email"
-              name="confirmarEmail"
-              placeholder="Confirmar Email (*)"
-              value={form.confirmarEmail}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.row}>
             <input
               type="email"
               name="email"
@@ -205,16 +213,17 @@ export const RegisterForm: React.FC = () => {
               onChange={handleChange}
               required
             />
+          </div>
+
+          <div className={styles.row}>
             <input
-              type="password"
-              name="confirmarPassword"
-              placeholder="Confirmar Contraseña (*)"
-              value={form.confirmarPassword}
+              type="email"
+              name="confirmarEmail"
+              placeholder="Confirmar Email (*)"
+              value={form.confirmarEmail}
               onChange={handleChange}
               required
             />
-          </div>
-          <div className={styles.singleRow}>
             <input
               type="password"
               name="password"
@@ -223,6 +232,17 @@ export const RegisterForm: React.FC = () => {
               onChange={handleChange}
               required
               minLength={6}
+            />
+          </div>
+
+          <div className={styles.singleRow}>
+            <input
+              type="password"
+              name="confirmarPassword"
+              placeholder="Confirmar Contraseña (*)"
+              value={form.confirmarPassword}
+              onChange={handleChange}
+              required
             />
           </div>
 

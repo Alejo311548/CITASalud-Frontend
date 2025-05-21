@@ -1,7 +1,7 @@
 const API_URL = "http://localhost:8080";
 
-export async function get(path: string) {
-  const res = await fetch(`${API_URL}${path}`);
+export async function get(path: string, options?: RequestInit) {
+  const res = await fetch(`${API_URL}${path}`, options);
   if (!res.ok) {
     let errorMessage = `Error en GET ${path}: ${res.status} ${res.statusText}`;
     try {
@@ -13,12 +13,23 @@ export async function get(path: string) {
   return res.json();
 }
 
-export async function post(path: string, data: any) {
+export async function post(path: string, data: any, options?: RequestInit) {
+  const token = localStorage.getItem("token");
+
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  const headers = {
+    ...defaultHeaders,
+    ...(options?.headers || {}),
+  };
+
   const res = await fetch(`${API_URL}${path}`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    ...options,
+    headers,
     body: JSON.stringify(data),
   });
 
@@ -35,7 +46,6 @@ export async function post(path: string, data: any) {
   if (contentType?.includes("application/json")) {
     return res.json();
   } else {
-    return { message: await res.text() }; // Devuelve objeto con mensaje
+    return { message: await res.text() };
   }
 }
-

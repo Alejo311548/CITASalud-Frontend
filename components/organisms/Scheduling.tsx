@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import styles from "./scheduling.module.css";
 import {
@@ -13,7 +14,8 @@ import {
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
-import { get, post } from "../../utils/api"; // Ajusta la ruta si es necesario
+import { get, post } from "../../utils/api"; 
+import { getToken, removeToken } from "@/utils/auth";
 
 interface Sede {
   id: string;
@@ -30,12 +32,10 @@ interface Profesional {
   nombre: string;
 }
 
-const user = {
-  name: "Juan Pérez",
-  role: "Administrador",
-};
+
 
 const Scheduling = () => {
+  const router = useRouter();
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
   const [showModal, setShowModal] = useState(false);
 
@@ -160,20 +160,46 @@ const Scheduling = () => {
   };
 
   const handleConfirm = async () => {
-    if (!selectedProfesional || !selectedTime || !selectedDay || !selectedSede || !selectedEspecialidad) {
+    const token = getToken(); // Mover lectura de token aquí
+    
+console.log("Token antes de enviar:", token);
+if (!token) {
+  alert("Usuario no autenticado. Por favor inicie sesión.");
+  return;
+}
+
+
+    if (
+      !selectedProfesional ||
+      !selectedTime ||
+      !selectedDay ||
+      !selectedSede ||
+      !selectedEspecialidad
+    ) {
       alert("Complete todos los campos.");
       return;
     }
+
+    if (!token) {
+      alert("Usuario no autenticado. Por favor inicie sesión.");
+      return;
+    }
+
+    const fechaHoraISO = `${selectedDay.toISOString().slice(0, 10)}T${selectedTime}:00`;
 
     const cita = {
       profesionalId: selectedProfesional,
       sedeId: selectedSede,
       especialidadId: selectedEspecialidad,
-      fechaHora: `${selectedDay.toISOString().slice(0, 10)}T${selectedTime}:00`,
+      fechaHora: fechaHoraISO,
     };
 
     try {
-      await post("/api/citas", cita);
+      await post("/api/citas", cita, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       alert("Cita agendada correctamente");
       setShowModal(false);
       setSelectedDay(undefined);
@@ -187,42 +213,50 @@ const Scheduling = () => {
     }
   };
 
+  const handleLogout = () => {
+      removeToken();           // Elimina el token JWT
+      router.push("/");        // Redirige a la página principal
+    };
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
-        <div className={styles.logoCircle}>
-          <Image src="/logo.png" alt="Logo" width={70} height={70} className={styles.logoImage} />
-        </div>
-
-        <h2 className={styles.menuTitle}>Menú de Citas</h2>
-        <div className={styles.menuOptions}>
-          <button className={styles.menuButton}>
-            <CalendarPlus size={24} className={styles.icon} />
-            Agendar Cita
-          </button>
-          <button className={styles.menuButton}>
-            <CalendarX size={24} className={styles.icon} />
-            Cancelar Cita
-          </button>
-          <button className={styles.menuButton}>
-            <CalendarClock size={24} className={styles.icon} />
-            Modificar Cita
-          </button>
-          <button className={styles.menuButton}>
-            <CalendarDays size={24} className={styles.icon} />
-            Visualizar Citas
-          </button>
-          <button className={`${styles.menuButton} ${styles.logoutButton}`}>
-            <LogOut size={24} className={styles.icon} />
-            Cerrar sesión
-          </button>
-        </div>
-      </aside>
+              <div className={styles.logoCircle}>
+                <Image src="/logo.png" alt="Logo" width={70} height={70} className={styles.logoImage} />
+              </div>
+      
+              <h2 className={styles.menuTitle}>Menú de Citas</h2>
+              <div className={styles.menuOptions}>
+                <button className={styles.menuButton} onClick={() => router.push("/scheduling")}>
+                  <CalendarPlus size={24} className={styles.icon} />
+                  Agendar Cita
+                </button>
+                <button
+                  className={styles.menuButton}
+                  style={{ backgroundColor: "#fcd34d" }}
+                  onClick={() => router.push("/CancelAppointment")}
+                >
+                  <CalendarX size={24} className={styles.icon} />
+                  Cancelar Cita
+                </button>
+                <button className={styles.menuButton} onClick={() => alert("Funcionalidad no disponible aún")}>
+                  <CalendarClock size={24} className={styles.icon} />
+                  Modificar Cita
+                </button>
+                <button className={styles.menuButton} onClick={() => router.push("/ViewAppointments")}>
+                  <CalendarDays size={24} className={styles.icon} />
+                  Visualizar Citas
+                </button>
+                <button className={`${styles.menuButton} ${styles.logoutButton}`} onClick={handleLogout}>
+                  <LogOut size={24} className={styles.icon} />
+                  Cerrar sesión
+                </button>
+              </div>
+            </aside>
 
       <main className={styles.main}>
         <section className={styles.headerSection}>
           <div className={styles.welcome}>
-            Bienvenido a CITASalud, <strong>{user.name}</strong> ({user.role})
+            Bienvenido a CITASalud 
           </div>
 
           <h2 className={styles.title}>
@@ -299,58 +333,99 @@ const Scheduling = () => {
       {showModal && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <div className={styles.modalLogo}>
-              <Image
-                src="/logo.png"
-                alt="logo"
-                width={100}
-                height={100}
-              />
-            </div>
-            <h2>Agendar cita para {selectedDay?.toLocaleDateString()}</h2>
-
-            <div className={styles.inputGroup}>
-              <label>Profesional:</label>
-              <select
-                value={selectedProfesional}
-                onChange={(e) => setSelectedProfesional(e.target.value)}
-              >
-                <option value="">Seleccione</option>
-                {profesionales.map((prof) => (
-                  <option key={prof.id} value={prof.id}>
-                    {prof.nombre}
-                  </option>
-                ))}
-              </select>
+            <div className={styles.modalLogoCircle}>
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={80}
+          height={80}
+          className={styles.modalLogoImage}
+        />
+      </div>
+            <div className={styles.modalHeader}>
+              <h3>Agendar cita para {selectedDay?.toLocaleDateString()}</h3>
+              
             </div>
 
-            <div className={styles.inputGroup}>
+            <div className={styles.modalBody}>
+              <div className={styles.inputGroup}>
+                <label>Sede:</label>
+                <select
+                  value={selectedSede}
+                  onChange={(e) => setSelectedSede(e.target.value)}
+                >
+                  <option value="">Seleccione</option>
+                  {sedes.map((sede) => (
+                    <option key={sede.id} value={sede.id}>
+                      {sede.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label>Especialidad:</label>
+                <select
+                  value={selectedEspecialidad}
+                  onChange={(e) => setSelectedEspecialidad(e.target.value)}
+                >
+                  <option value="">Seleccione</option>
+                  {especialidades.map((esp) => (
+                    <option key={esp.id} value={esp.id}>
+                      {esp.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.inputGroup}>
+                <label>Profesional:</label>
+                <select
+                  value={selectedProfesional}
+                  onChange={(e) => setSelectedProfesional(e.target.value)}
+                >
+                  <option value="">Seleccione</option>
+                  {profesionales.map((prof) => (
+                    <option key={prof.id} value={prof.id}>
+                      {prof.nombre}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.inputGroup}>
   <label>Horario:</label>
   <select
     value={selectedTime}
     onChange={(e) => setSelectedTime(e.target.value)}
   >
     <option value="">Seleccione</option>
-    {Array.from({ length: 10 }, (_, i) => {
-      const hour = 8 + i;
-      const formatted = hour.toString().padStart(2, '0') + ':00';
+    {Array.from({ length: 18 }, (_, i) => {
+      const hour = Math.floor(i / 2) + 8;
+      const minute = i % 2 === 0 ? "00" : "30";
+      const time = `${hour.toString().padStart(2, "0")}:${minute}`;
       return (
-        <option key={formatted} value={formatted}>
-          {formatted}
+        <option key={time} value={time}>
+          {time}
         </option>
       );
     })}
   </select>
 </div>
+            </div>
 
+            <div className={styles.modalFooter}>
+  <button className={styles.confirmButton} onClick={handleConfirm}>
+    Confirmar cita
+  </button>
+  <button
+    className={styles.cancelButton}
+    onClick={() => setShowModal(false)}
+  >
+    Cancelar
+  </button>
+</div>
 
-            <button onClick={handleConfirm} className={styles.confirmButton}>
-              Confirmar Cita
-            </button>
-
-            <button onClick={() => setShowModal(false)} className={styles.cancelButton}>
-              Cancelar
-            </button>
           </div>
         </div>
       )}
