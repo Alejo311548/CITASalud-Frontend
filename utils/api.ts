@@ -49,3 +49,41 @@ export async function post(path: string, data: any, options?: RequestInit) {
     return { message: await res.text() };
   }
 }
+
+export async function put(path: string, data: any, options?: RequestInit) {
+  const token = localStorage.getItem("token");
+
+  const defaultHeaders = {
+    "Content-Type": "application/json",
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+
+  const headers = {
+    ...defaultHeaders,
+    ...(options?.headers || {}),
+  };
+
+  const res = await fetch(`${API_URL}${path}`, {
+    method: "PUT",
+    ...options,
+    headers,
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    let errorMessage = `Error en PUT ${path}: ${res.status} ${res.statusText}`;
+    try {
+      const errorData = await res.json();
+      errorMessage = errorData.message || errorData.error || errorMessage;
+    } catch {}
+    throw new Error(errorMessage);
+  }
+
+  const contentType = res.headers.get("content-type");
+  if (contentType?.includes("application/json")) {
+    return res.json();
+  } else {
+    return { message: await res.text() };
+  }
+}
+
