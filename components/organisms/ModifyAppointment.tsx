@@ -1,9 +1,17 @@
-// components/organisms/ModifyAppointment.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getToken } from "@/utils/auth";
+import Image from "next/image";
+import styles from "./scheduling.module.css"; // Usamos mismo archivo de estilos
+import {
+  CalendarPlus,
+  CalendarX,
+  CalendarClock,
+  CalendarDays,
+  LogOut,
+} from "lucide-react";
+import { getToken, removeToken } from "@/utils/auth";
 
 interface ModifyAppointmentProps {
   appointmentId: string;
@@ -75,54 +83,122 @@ const ModifyAppointment = ({ appointmentId }: ModifyAppointmentProps) => {
     }
   };
 
+  const handleLogout = () => {
+    removeToken();
+    router.push("/");
+  };
+
   return (
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h2 style={{ fontSize: "1.5rem", fontWeight: "bold", marginBottom: "1rem" }}>
-        Modificar Cita Médica
-      </h2>
-
-      {loading ? (
-        <p>Cargando cita...</p>
-      ) : (
-        <form onSubmit={handleSubmit}>
-          <p>
-            <strong>Fecha y hora actual:</strong>{" "}
-            {fechaHoraActual?.toLocaleString()}
-          </p>
-
-          <label htmlFor="nuevaFechaHora" style={{ display: "block", marginTop: "1rem" }}>
-            Nueva fecha y hora:
-          </label>
-          <input
-            id="nuevaFechaHora"
-            type="datetime-local"
-            value={nuevaFechaHora}
-            onChange={(e) => setNuevaFechaHora(e.target.value)}
-            required
-            style={{ padding: "0.5rem", width: "100%", marginBottom: "1rem" }}
+    <div className={styles.container}>
+      <aside className={styles.sidebar}>
+        <div className={styles.logoCircle}>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={70}
+            height={70}
+            className={styles.logoImage}
           />
+        </div>
 
+        <h2 className={styles.menuTitle}>Menú de Citas</h2>
+        <div className={styles.menuOptions}>
           <button
-            type="submit"
-            style={{
-              backgroundColor: "#3b82f6",
-              color: "white",
-              padding: "0.5rem 1rem",
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-            }}
+            className={styles.menuButton}
+            onClick={() => router.push("/scheduling")}
           >
-            Confirmar Cambio
+            <CalendarPlus size={24} className={styles.icon} />
+            Agendar Cita
           </button>
-        </form>
-      )}
+          <button
+            className={styles.menuButton}
+            style={{ backgroundColor: "#fcd34d" }}
+            onClick={() => router.push("/CancelAppointment")}
+          >
+            <CalendarX size={24} className={styles.icon} />
+            Cancelar Cita
+          </button>
+          <button
+            className={styles.menuButton}
+            style={{ backgroundColor: "#3b82f6", color: "white" }}
+            onClick={() => router.push(`/ModifyAppointment?appointmentId=${appointmentId}`)}
+          >
+            <CalendarClock size={24} className={styles.icon} />
+            Modificar Cita
+          </button>
+          <button
+            className={styles.menuButton}
+            onClick={() => router.push("/ViewAppointments")}
+          >
+            <CalendarDays size={24} className={styles.icon} />
+            Visualizar Citas
+          </button>
+          <button
+            className={`${styles.menuButton} ${styles.logoutButton}`}
+            onClick={handleLogout}
+          >
+            <LogOut size={24} className={styles.icon} />
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
 
-      {mensaje && (
-        <p style={{ marginTop: "1rem", color: mensaje.includes("exitosamente") ? "green" : "red" }}>
-          {mensaje}
-        </p>
-      )}
+      <main className={styles.main}>
+        <section className={styles.headerSection}>
+          <div className={styles.welcome}>Bienvenido a CITASalud</div>
+
+          <h2 className={styles.title}>
+            <CalendarClock size={28} />
+            Modificar Cita Médica
+          </h2>
+          <p className={styles.subtitle}>
+            Cambie la fecha y hora de su cita médica seleccionando el nuevo
+            horario.
+          </p>
+        </section>
+
+        <section className={styles.formSection} style={{ maxWidth: 600 }}>
+          {loading ? (
+            <p>Cargando cita...</p>
+          ) : (
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <p className={styles.formText}>
+                <strong>Fecha y hora actual:</strong>{" "}
+                {fechaHoraActual?.toLocaleString()}
+              </p>
+
+              <label htmlFor="nuevaFechaHora" className={styles.label}>
+                Nueva fecha y hora:
+              </label>
+              <input
+                id="nuevaFechaHora"
+                type="datetime-local"
+                value={nuevaFechaHora}
+                onChange={(e) => setNuevaFechaHora(e.target.value)}
+                required
+                className={styles.input}
+              />
+
+              <button type="submit" className={styles.confirmButton}>
+                Confirmar Cambio
+              </button>
+            </form>
+          )}
+
+          {mensaje && (
+            <p
+              className={
+                mensaje.includes("exitosamente")
+                  ? styles.successMessage
+                  : styles.errorMessage
+              }
+              style={{ marginTop: "1rem" }}
+            >
+              {mensaje}
+            </p>
+          )}
+        </section>
+      </main>
     </div>
   );
 };
