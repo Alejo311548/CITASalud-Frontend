@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
-import styles from "./scheduling.module.css"; // reutilizas tus estilos
+import styles from "./scheduling.module.css";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { CalendarClock, LogOut } from "lucide-react";
@@ -11,12 +11,10 @@ import { CalendarClock, LogOut } from "lucide-react";
 import { getToken, removeToken } from "@/utils/auth";
 import { get, put } from "@/utils/api";
 
-interface ModifyAppointmentProps {
-  citaId: string;
-}
-
-export default function ModifyAppointment({ citaId }: ModifyAppointmentProps) {
+export default function ModifyAppointment() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const citaId = searchParams.get("citaId");
 
   const [loading, setLoading] = useState(true);
   const [cita, setCita] = useState<any>(null);
@@ -24,8 +22,17 @@ export default function ModifyAppointment({ citaId }: ModifyAppointmentProps) {
   const [selectedTime, setSelectedTime] = useState("");
   const [horarios, setHorarios] = useState<string[]>([]);
 
+  // Redirige si no hay citaId
+  useEffect(() => {
+    if (!citaId) {
+      alert("ID de cita no especificado.");
+      router.push("/ViewAppointments");
+    }
+  }, [citaId, router]);
+
   // 1) Cargar la cita actual
   useEffect(() => {
+    if (!citaId) return;
     (async () => {
       try {
         const token = getToken();
@@ -91,7 +98,7 @@ export default function ModifyAppointment({ citaId }: ModifyAppointmentProps) {
   // 4) Enviar PUT al confirmar
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedDay || !selectedTime) {
+    if (!selectedDay || !selectedTime || !citaId) {
       alert("Seleccione fecha y hora válidas.");
       return;
     }
@@ -119,7 +126,7 @@ export default function ModifyAppointment({ citaId }: ModifyAppointmentProps) {
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
-        {/* … tu sidebar igual que Scheduling, omitido por brevedad */}
+        {/* Sidebar igual que el componente Scheduling */}
         <button
           className={`${styles.menuButton} ${styles.logoutButton}`}
           onClick={() => {
