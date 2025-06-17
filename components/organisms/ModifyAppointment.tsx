@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import styles from "./modifyAppointment.module.css"; // Crea estilos similares a scheduling.module.css
+import styles from "./scheduling.module.css"; 
 import { CalendarClock, CalendarDays, LogOut } from "lucide-react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
