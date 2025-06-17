@@ -160,16 +160,6 @@ export const RegisterForm: React.FC = () => {
               onChange={handleChange}
               required
             />
-            <input
-              type="date"
-              name="fechaNacimiento"
-              placeholder="Fecha de nacimiento"
-              value={form.fechaNacimiento}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className={styles.row}>
             <select
               name="tipoDocumento"
               value={form.tipoDocumento}
@@ -183,7 +173,16 @@ export const RegisterForm: React.FC = () => {
               <option value="Tarjeta de identidad">Tarjeta de identidad</option>
               <option value="Pasaporte">Pasaporte</option>
             </select>
+          </div>
 
+          <div className={styles.row}>
+            <input
+              type="date"
+              name="fechaNacimiento"
+              placeholder="Fecha de nacimiento"
+              value={form.fechaNacimiento}
+              onChange={handleChange}
+            />
             <input
               type="text"
               name="numeroDocumento"

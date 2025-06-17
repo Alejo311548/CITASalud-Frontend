@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import { getToken, removeToken } from "@/utils/auth";
 
-
 const ViewAppointments = () => {
   const router = useRouter();
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -30,7 +29,6 @@ const ViewAppointments = () => {
         return;
       }
 
-      console.log("Token obtenido:", token); //Borrar esta línea, la puse para imprimir el token
       try {
         const response = await fetch("https://citasalud-backend-1.onrender.com/api/citas/mis-citas", {
           method: "GET",
@@ -67,46 +65,64 @@ const ViewAppointments = () => {
     fetchAppointments();
   }, []);
 
-
   const handleLogout = () => {
-      removeToken();           // Elimina el token JWT
-      router.push("/");        // Redirige a la página principal
-    };
+    removeToken();
+    router.push("/");
+  };
+
   return (
     <div className={styles.container}>
       <aside className={styles.sidebar}>
-              <div className={styles.logoCircle}>
-                <Image src="/logo.png" alt="Logo" width={70} height={70} className={styles.logoImage} />
-              </div>
-      
-              <h2 className={styles.menuTitle}>Menú de Citas</h2>
-              <div className={styles.menuOptions}>
-                <button className={styles.menuButton} onClick={() => router.push("/scheduling")}>
-                  <CalendarPlus size={24} className={styles.icon} />
-                  Agendar Cita
-                </button>
-                <button
-                  className={styles.menuButton}
-                  style={{ backgroundColor: "#fcd34d" }}
-                  onClick={() => router.push("/CancelAppointment")}
-                >
-                  <CalendarX size={24} className={styles.icon} />
-                  Cancelar Cita
-                </button>
-                <button className={styles.menuButton} onClick={() => alert("Funcionalidad no disponible aún")}>
-                  <CalendarClock size={24} className={styles.icon} />
-                  Modificar Cita
-                </button>
-                <button className={styles.menuButton} onClick={() => router.push("/ViewAppointments")}>
-                  <CalendarDays size={24} className={styles.icon} />
-                  Visualizar Citas
-                </button>
-                <button className={`${styles.menuButton} ${styles.logoutButton}`} onClick={handleLogout}>
-                  <LogOut size={24} className={styles.icon} />
-                  Cerrar sesión
-                </button>
-              </div>
-            </aside>
+        <div className={styles.logoCircle}>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={70}
+            height={70}
+            className={styles.logoImage}
+          />
+        </div>
+
+        <h2 className={styles.menuTitle}>Menú de Citas</h2>
+        <div className={styles.menuOptions}>
+          <button
+            className={styles.menuButton}
+            onClick={() => router.push("/scheduling")}
+          >
+            <CalendarPlus size={24} className={styles.icon} />
+            Agendar Cita
+          </button>
+          <button
+            className={styles.menuButton}
+            style={{ backgroundColor: "#fcd34d" }}
+            onClick={() => router.push("/CancelAppointment")}
+          >
+            <CalendarX size={24} className={styles.icon} />
+            Cancelar Cita
+          </button>
+          <button
+            className={styles.menuButton}
+            onClick={() => alert("Funcionalidad no disponible aún")}
+          >
+            <CalendarClock size={24} className={styles.icon} />
+            Modificar Cita
+          </button>
+          <button
+            className={styles.menuButton}
+            onClick={() => router.push("/ViewAppointments")}
+          >
+            <CalendarDays size={24} className={styles.icon} />
+            Visualizar Citas
+          </button>
+          <button
+            className={`${styles.menuButton} ${styles.logoutButton}`}
+            onClick={handleLogout}
+          >
+            <LogOut size={24} className={styles.icon} />
+            Cerrar sesión
+          </button>
+        </div>
+      </aside>
 
       <main className={styles.main}>
         <section className={styles.headerSection}>
@@ -141,6 +157,7 @@ const ViewAppointments = () => {
                   <th>Especialidad</th>
                   <th>Sede</th>
                   <th>Estado</th>
+                  <th style={{ borderRadius: "0 8px 0 0" }}>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -170,6 +187,25 @@ const ViewAppointments = () => {
                       }}
                     >
                       {appt.status}
+                    </td>
+                    <td style={{ textAlign: "center" }}>
+                      {appt.status === "AGENDADA" && (
+                        <button
+                          style={{
+                            backgroundColor: "#facc15",
+                            color: "black",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "6px",
+                            border: "none",
+                            cursor: "pointer",
+                          }}
+                          onClick={() =>
+                            router.push(`/ModifyAppointment?id=${appt.id}`)
+                          }
+                        >
+                          Modificar
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
