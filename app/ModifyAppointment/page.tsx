@@ -1,11 +1,12 @@
-import React, { Suspense } from "react";
-import ModifyAppointmentClient from "@/components/organisms/ModifyAppointment";
+// app/ModifyAppointment/[citaId]/page.tsx
+import React from "react";
+import ModifyAppointment from "@/components/organisms/ModifyAppointment";
 
-export default function ModifyAppointmentPage() {
-  return (
-    // Envuelves el Client Component en Suspense para evitar el warning
-    <Suspense fallback={<p>Cargando formulario de modificación…</p>}>
-      <ModifyAppointmentClient />
-    </Suspense>
-  );
+export default function Page({
+  params,
+}: {
+  params: { citaId: string };
+}) {
+  // Server Component: recibe params.citaId de Next.js
+  return <ModifyAppointment citaId={params.citaId} />;
 }

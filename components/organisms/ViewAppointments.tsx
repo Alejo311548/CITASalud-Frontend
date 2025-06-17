@@ -200,7 +200,7 @@ const ViewAppointments = () => {
                             cursor: "pointer",
                           }}
                           onClick={() =>
-                            router.push(`/ModifyAppointment?citaId=${appt.id}`)
+                            router.push(`/ModifyAppointment/${appt.id}`)
                           }
                         >
                           Modificar
