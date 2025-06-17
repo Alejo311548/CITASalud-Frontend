@@ -214,8 +214,8 @@ if (!token) {
   };
 
   const handleLogout = () => {
-      removeToken();           // Elimina el token JWT
-      router.push("/");        // Redirige a la página principal
+      removeToken();           
+      router.push("/");        
     };
   return (
     <div className={styles.container}>
@@ -238,10 +238,7 @@ if (!token) {
                   <CalendarX size={24} className={styles.icon} />
                   Cancelar Cita
                 </button>
-                <button className={styles.menuButton} onClick={() => alert("Funcionalidad no disponible aún")}>
-                  <CalendarClock size={24} className={styles.icon} />
-                  Modificar Cita
-                </button>
+                
                 <button className={styles.menuButton} onClick={() => router.push("/ViewAppointments")}>
                   <CalendarDays size={24} className={styles.icon} />
                   Visualizar Citas

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import styles from "./scheduling.module.css"; // Usamos mismo archivo de estilos
+import styles from "./scheduling.module.css"; 
 import {
   CalendarPlus,
   CalendarX,
@@ -118,14 +118,7 @@ const ModifyAppointment = ({ appointmentId }: ModifyAppointmentProps) => {
             <CalendarX size={24} className={styles.icon} />
             Cancelar Cita
           </button>
-          <button
-            className={styles.menuButton}
-            style={{ backgroundColor: "#3b82f6", color: "white" }}
-            onClick={() => router.push(`/ModifyAppointment?appointmentId=${appointmentId}`)}
-          >
-            <CalendarClock size={24} className={styles.icon} />
-            Modificar Cita
-          </button>
+
           <button
             className={styles.menuButton}
             onClick={() => router.push("/ViewAppointments")}
@@ -149,7 +142,7 @@ const ModifyAppointment = ({ appointmentId }: ModifyAppointmentProps) => {
 
           <h2 className={styles.title}>
             <CalendarClock size={28} />
-            Modificar Cita Médica
+            Modificación de cita médica
           </h2>
           <p className={styles.subtitle}>
             Cambie la fecha y hora de su cita médica seleccionando el nuevo
@@ -180,7 +173,7 @@ const ModifyAppointment = ({ appointmentId }: ModifyAppointmentProps) => {
               />
 
               <button type="submit" className={styles.confirmButton}>
-                Confirmar Cambio
+                Confirmar cambio
               </button>
             </form>
           )}

@@ -100,13 +100,7 @@ const ViewAppointments = () => {
             <CalendarX size={24} className={styles.icon} />
             Cancelar Cita
           </button>
-          <button
-            className={styles.menuButton}
-            onClick={() => alert("Funcionalidad no disponible aún")}
-          >
-            <CalendarClock size={24} className={styles.icon} />
-            Modificar Cita
-          </button>
+          
           <button
             className={styles.menuButton}
             onClick={() => router.push("/ViewAppointments")}
@@ -127,12 +121,12 @@ const ViewAppointments = () => {
       <main className={styles.main}>
         <section className={styles.headerSection}>
           <div className={styles.welcome}>
-            Bienvenido a CITASalud, <strong>Paciente</strong>
+            Bienvenido a CITASalud, <strong>paciente</strong>
           </div>
 
           <h2 className={styles.title}>
             <CalendarDays size={28} />
-            Mis Citas Médicas
+            Mis citas médicas
           </h2>
           <p className={styles.subtitle}>
             Aquí puedes ver todas las citas programadas para ti.

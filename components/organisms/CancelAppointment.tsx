@@ -132,10 +132,7 @@ const CancelAppointments = () => {
             <CalendarX size={24} className={styles.icon} />
             Cancelar Cita
           </button>
-          <button className={styles.menuButton} onClick={() => alert("Funcionalidad no disponible aún")}>
-            <CalendarClock size={24} className={styles.icon} />
-            Modificar Cita
-          </button>
+          
           <button className={styles.menuButton} onClick={() => router.push("/ViewAppointments")}>
             <CalendarDays size={24} className={styles.icon} />
             Visualizar Citas
@@ -150,12 +147,12 @@ const CancelAppointments = () => {
       <main className={styles.main}>
         <section className={styles.headerSection}>
           <div className={styles.welcome}>
-            Bienvenido a CITASalud, <strong>Paciente</strong>
+            Bienvenido a CITASalud, <strong>paciente</strong>
           </div>
 
           <h2 className={styles.title}>
             <CalendarX size={28} />
-            Cancelar Citas Médicas
+            Cancelación de citas médicas
           </h2>
           <p className={styles.subtitle}>Selecciona la cita que deseas cancelar.</p>
         </section>
