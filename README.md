@@ -17,7 +17,7 @@ Integración completa de frontend (Vercel) y backend (Render).
 
 ---
 
-## 📘 Documentación en Swagger
+## Documentación en Swagger
 
 [Ver documentación Swagger](https://citasalud-backend-1.onrender.com/swagger-ui/index.html)
 
